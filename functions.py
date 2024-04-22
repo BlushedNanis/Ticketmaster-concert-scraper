@@ -1,5 +1,12 @@
 from requests import get
 from lxml.html import fromstring
+from smtplib import SMTP_SSL
+from ssl import create_default_context
+from dotenv import load_dotenv
+from os import getenv
+
+
+load_dotenv()
 
 
 def scrap(artist:str):
@@ -24,8 +31,23 @@ def extract(source:bytes):
     artist_link = webpage.xpath('//*[@id="main-content"]/div/div[1]/div[2]/div/ul/li/a/@href')[0]
     return events_data, artist_link
   
+def send_email(data:list, artist:str, artist_link:str):
+    sender = getenv("sender")
+    receiver = getenv("receiver")
+    password = getenv("sender_pass")
+      
+    formatted_events = [f"{event[0]} - {event[1]}\nBuy tickets! : {event[2]}\n\n" for event in data]
+    formatted_events = "".join(formatted_events)
+    message = f"Subject: Hey, new {artist.title()} upcoming event!\n\n"\
+        f"{formatted_events}"\
+        f"Or check it on the ticketmaster webpage: https://www.ticketmaster.ca{artist_link}"
+      
+    with SMTP_SSL("smtp.gmail.com", context=create_default_context()) as server:
+        server.login(sender, password)
+        server.sendmail(sender, receiver, message)
     
 if __name__ == "__main__":
     scraped = scrap("nothing but thieves")
-    extracted = extract(scraped)
+    extracted, extracted_link = extract(scraped)
     print(extracted)
+    send_email(extracted, "nothing but thieves", extracted_link)
