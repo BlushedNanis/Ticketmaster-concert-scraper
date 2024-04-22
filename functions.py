@@ -23,6 +23,9 @@ def extract(source:bytes):
             break
     artist_link = webpage.xpath('//*[@id="main-content"]/div/div[1]/div[2]/div/ul/li/a/@href')[0]
     return events_data, artist_link
+  
     
-
-print(extract(scrap("nothing but thieves")))
+if __name__ == "__main__":
+    scraped = scrap("nothing but thieves")
+    extracted = extract(scraped)
+    print(extracted)
