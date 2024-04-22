@@ -13,12 +13,14 @@ result = cur.fetchone()
 if result is None:
     cur.execute("CREATE TABLE events(event, date, link)")
 
-
+# Get data from ticket master
 scraped = functions.scrap(ARTIST)
 events_data, artist_link = functions.extract(scraped)
 
+# List to contain new events
 events_to_mail = []
 
+# Save new events into db 
 for event in events_data:
     event_date = event[1]
     cur.execute(f"SELECT date FROM events WHERE date=='{event_date}'")
@@ -26,6 +28,7 @@ for event in events_data:
         cur.execute("INSERT INTO events VALUES (?,?,?)", event)
         con.commit()
         events_to_mail.append(event)
-        
+
+# Send email if there is new events
 if len(events_to_mail) > 0:
     functions.send_email(events_to_mail, ARTIST, artist_link)
