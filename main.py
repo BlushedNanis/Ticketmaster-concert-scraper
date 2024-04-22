@@ -1,5 +1,5 @@
 import sqlite3 as db
-import functions
+import backend
 
 # Name of the artist to be scraped from ticketmaster
 ARTIST = "nothing but thieves"
@@ -14,8 +14,8 @@ if result is None:
     cur.execute("CREATE TABLE events(event, date, link)")
 
 # Get data from ticket master
-scraped = functions.scrap(ARTIST)
-events_data, artist_link = functions.extract(scraped)
+scraped = backend.scrap(ARTIST)
+events_data, artist_link = backend.extract(scraped)
 
 # List to contain new events
 events_to_mail = []
@@ -31,4 +31,4 @@ for event in events_data:
 
 # Send email if there is new events
 if len(events_to_mail) > 0:
-    functions.send_email(events_to_mail, ARTIST, artist_link)
+    backend.send_email(events_to_mail, ARTIST, artist_link)
