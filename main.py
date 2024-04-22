@@ -17,11 +17,15 @@ if result is None:
 scraped = functions.scrap(ARTIST)
 events_data, artist_link = functions.extract(scraped)
 
+events_to_mail = []
+
 for event in events_data:
     event_date = event[1]
     cur.execute(f"SELECT date FROM events WHERE date=='{event_date}'")
     if cur.fetchone() is None:
         cur.execute("INSERT INTO events VALUES (?,?,?)", event)
         con.commit()
+        events_to_mail.append(event)
         
-        
+if len(events_to_mail) > 0:
+    functions.send_email(events_to_mail, ARTIST, artist_link)
