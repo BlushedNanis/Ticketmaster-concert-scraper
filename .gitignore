@@ -1,3 +1,4 @@
 .env
 Ticketmaster concert scraper.code-workspace
 test.py
+__pycache__
