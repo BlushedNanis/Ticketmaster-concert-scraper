@@ -24,6 +24,7 @@ def scrap(artist:str):
     source = response.content
     return source
 
+
 def extract(source:bytes):
     """Extracts events data from the given html source.
 
@@ -58,7 +59,8 @@ def extract(source:bytes):
         "/div/ul/li/a/@href")[0]
     
     return events_data, artist_link
-  
+
+
 def send_email(data:list, artist:str, artist_link:str):
     """Sends an email with the new events data with a formatted message (body).
 
@@ -86,6 +88,45 @@ def send_email(data:list, artist:str, artist_link:str):
         server.sendmail(sender, receiver, message.encode("utf-8"))
     
 
+def check_artist(source:bytes):
+    """Checks the validity of the given artist name
+
+    Args:
+        source (bytes): html source
+
+    Returns:
+        bool: If the artist name is valid returns True, otherwise returns False
+    """
+    webpage = fromstring(source)
+    
+    # Try except block is used to know if the given artist name is valid.
+    try:
+        webpage.xpath("//*[@id='main-content']/div/div[1]/div[2]"\
+            "/div/ul/li/a/@href")[0]
+    except IndexError:
+        return False
+    
+    return True
+
+def dummy_email():
+    """
+    Sens a simple email to let the user know when the given artist name is 
+    not valid.
+    """
+    sender = getenv("sender")
+    receiver = getenv("receiver")
+    password = getenv("sender_pass")
+    
+    message = "Subject: Ticketmaster scraper: wrong artist name!\n\n"\
+        "Hey buddy!,\n\n Please check the given name for the artist on the "\
+        "ticketmaster scraper. You can use this url 'https://www.ticketmaster"\
+        ".ca/search?q=' to check for a valid artist name\n\nGood luck!"
+      
+    with SMTP_SSL("smtp.gmail.com", context=create_default_context()) as server:
+        server.login(sender, password)
+        server.sendmail(sender, receiver, message.encode("utf-8"))
+    
+    
 if __name__ == "__main__":
     scraped = scrap("nothing but thieves")
     extracted, extracted_link = extract(scraped)
