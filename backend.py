@@ -110,7 +110,7 @@ def check_artist(source:bytes):
 
 def dummy_email():
     """
-    Sens a simple email to let the user know when the given artist name is 
+    Sends a simple email to let the user know when the given artist name is 
     not valid.
     """
     sender = getenv("sender")
