@@ -2,7 +2,7 @@ import sqlite3 as db
 import backend
 
 # Name of the artist to be scraped from ticketmaster
-ARTIST = "nothing but thugs"
+ARTIST = "nothing but thieves"
 
 # Get data from ticket master
 scraped = backend.scrap(ARTIST)
