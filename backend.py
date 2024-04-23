@@ -83,7 +83,7 @@ def send_email(data:list, artist:str, artist_link:str):
       
     with SMTP_SSL("smtp.gmail.com", context=create_default_context()) as server:
         server.login(sender, password)
-        server.sendmail(sender, receiver, message)
+        server.sendmail(sender, receiver, message.encode("utf-8"))
     
 
 if __name__ == "__main__":
