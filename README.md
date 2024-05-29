@@ -12,9 +12,9 @@ You will need a Gmail account with a app password to send the email alerts, othe
 
 1. Set the artist name in main.py
 2. Create a *.env* file and set the next enviorement variables:
-   1. sender (Email address to send the email alert)
-   2. receiver (Email address to receive the email alert)
-   3. sender_pass (Email password to login to the email sender address)
+   1. *sender:* Email address to send the email alert
+   2. *receiver:* Email address to receive the email alert
+   3. *sender_pass:* Email password to login to the email sender address
 3. Install the *requierements.txt* file.
 4. Set the execution of the script in a task scheduler, this could be the Windows task scheduler, PythonAnywhere, or any service that meets your needs.
 5. Execute the *main.py* file, the first time you will receive an email with the full list of events of that artist, and in the next executions you will receive only the new events published in ticketmaster.
